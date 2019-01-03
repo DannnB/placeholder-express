@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 
 const sharp = require('sharp');
 
-const createImage = require('./util/createimage');
+const ImageCreator = require('./util/createimage');
 
 const app = express();
 
@@ -19,41 +19,35 @@ app.get('/', (req, res) => {
 
 // a92828
 app.get('/:width/:height', (req, res) => {
-  // this works using sharp() in the same file....
-
   const width = parseInt(req.params.width);
   const height = parseInt(req.params.height);
   const hexColor = '#' + (req.query.bgcolor ? req.query.bgcolor : 'cccccc');
-  
-  // const bgcolor = req.query.bgcolor ? hexToRgbA(req.query.bgcolor) : 'rgba(255,255,255,0.6)';
 
-  sharp({
-      create: {
-        width: width,
-        height: height,
-        channels: 4,
-        background: hexColor
-      }
-    })
-    .png()
-    // .jpeg({
-    //   quality: 100,
-    //   chromaSubsampling: '4:4:4'
-    // })
-    .toBuffer()
-    .then((data) => {
-      res.setHeader('Content-Type', 'image/png');
-      res.send(data);
-    })
+  ImageCreator.createImageFromUrl(
+    req,
+    res,
+    width,
+    height,
+    hexColor
+  );
 })
 
+// a92828
 app.get('/:width', (req, res) => {
   // this dosn't work using sharp() in a exported
+  const hexColor = '#' + (req.query.bgcolor ? req.query.bgcolor : 'cccccc');
+  const width = parseInt(req.params.width);
 
-  const width = parseInt(req.params.width);  
+  ImageCreator.createImageFromUrl(
+    req, 
+    res, 
+    width, 
+    width, 
+    hexColor
+  );
   
-  res.setHeader('Content-Type', 'image/png');  
-  res.send(createImage.image());
+  // res.setHeader('Content-Type', 'image/png');  
+  // res.send(`<img src="${createImage.image()}"`);
 })
 
 

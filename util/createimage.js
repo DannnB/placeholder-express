@@ -1,15 +1,19 @@
 const sharp = require('sharp');
 
-const createImage = (width) => {
-  const hexColor = '#cccccc';
-  const w = 120; // hardcored as 'width' fails
 
-  console.log('Running create image');
+class CreateImage {}
+
+const createImageFromUrl = (req, res, width, height = width, color) => {
+  const hexColor = color;
+  const w = width; // hardcoded as 'width' fails
+  const h = height; // hardcoded as 'width' fails
+
+  console.log('Running createImageFromUrl');
 
   sharp({
     create: {
       width: w,
-      height: w,
+      height: h,
       channels: 4,
       background: hexColor
     }
@@ -17,11 +21,13 @@ const createImage = (width) => {
   .png()
   .toBuffer()
   .then((data) => {
-    // returns mutiple data..
-    console.log(data);
+    res.setHeader('Content-Type', 'image/png');
+    res.send(data);
   })
+  .catch((e) => {
+    console.log('Error: ', e);
+  })
+
 }
 
-
-// needs to return the data to the res.send(createImage.image()); in app.js on line 54
-exports.image = createImage;
+exports.createImageFromUrl = createImageFromUrl;
