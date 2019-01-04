@@ -18,7 +18,21 @@ app.get('/', (req, res) => {
 })
 
 // a92828
-app.get('/:width/:height', (req, res) => {
+// app.get('/:width/:height', (req, res) => {
+//   const width = parseInt(req.params.width);
+//   const height = parseInt(req.params.height);
+//   const hexColor = '#' + (req.query.bgcolor ? req.query.bgcolor : 'cccccc');
+
+//   ImageCreator.createImageFromUrl(
+//     req,
+//     res,
+//     width,
+//     height,
+//     hexColor
+//   );
+// })
+
+app.get('/img/:width/:height', (req, res) => {
   const width = parseInt(req.params.width);
   const height = parseInt(req.params.height);
   const hexColor = '#' + (req.query.bgcolor ? req.query.bgcolor : 'cccccc');
@@ -33,22 +47,45 @@ app.get('/:width/:height', (req, res) => {
 })
 
 // a92828
-app.get('/:width', (req, res) => {
+app.get('/img/:size', (req, res) => {
   // this dosn't work using sharp() in a exported
   const hexColor = '#' + (req.query.bgcolor ? req.query.bgcolor : 'cccccc');
-  const width = parseInt(req.params.width);
+  let width = req.params.size.split('x')[0];
+  let height = (req.params.size.split('x')[1]) ? req.params.size.split('x')[1] : width ;
+  
 
   ImageCreator.createImageFromUrl(
     req, 
     res, 
-    width, 
-    width, 
+    parseInt(width), 
+    parseInt(height), 
     hexColor
   );
   
   // res.setHeader('Content-Type', 'image/png');  
   // res.send(`<img src="${createImage.image()}"`);
 })
+
+// app.get('/img/:size', (req, res) => {
+//   // this dosn't work using sharp() in a exported
+//   const hexColor = '#' + (req.query.bgcolor ? req.query.bgcolor : 'cccccc');
+//   const width = req.params.size;
+
+//   console.log(width);
+//   res.send(width);
+  
+
+//   // ImageCreator.createImageFromUrl(
+//   //   req, 
+//   //   res, 
+//   //   width, 
+//   //   width, 
+//   //   hexColor
+//   // );
+  
+//   // res.setHeader('Content-Type', 'image/png');  
+//   // res.send(`<img src="${createImage.image()}"`);
+// })
 
 
 // if 404

@@ -5,10 +5,10 @@ class CreateImage {}
 
 const createImageFromUrl = (req, res, width, height = width, color) => {
   const hexColor = color;
-  const w = width; // hardcoded as 'width' fails
-  const h = height; // hardcoded as 'width' fails
+  const w = width;
+  const h = height;
 
-  console.log('Running createImageFromUrl');
+  console.log(`createImageFromUrl: w(${width}) h(${height})`);
 
   sharp({
     create: {
